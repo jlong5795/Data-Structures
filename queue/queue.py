@@ -53,16 +53,30 @@ class LinkedList: # implemented with linked list
         # first node in the list (calling head as in head vs tail)
         self.head = None
 
-    def add(self, value):
+    def add_to_end(self, value):
         # regardless of if the node is empty or not, we need to wrap value in a node
         new_node = Node(value)
 
-        # set next reference to current head
-        new_node.next_node = self.head 
+        # if queue is empty set new_node as the head
+        if not self.head:
+            self.head = new_node
+        else:
+        # start at the head
+            current = self.head
+            # as long as there is another node
+            while current.get_next() is not None:
+                # traverse the list to the end
+                current = current.get_next()
+            # add new_node to the end
+            current.set_next(new_node)
+        
 
-        # becomes new head
-        self.head = new_node 
-
-    def remove(self):
+    def remove_from_head(self):
+        # if this is the first item in the queue (first out)
         if self.head:
-            self.storage.dequeue()
+            # store value to return later
+            value = self.head.get_value()
+            # set head to the next node
+            self.head = self.head.get_next()
+            return value
+            
