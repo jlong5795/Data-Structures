@@ -1,3 +1,4 @@
+# from guided project
 class Node:
     def __init__(self, value=None, next_node=None):
         # value at this node
@@ -15,55 +16,56 @@ class Node:
         # set this node's next reference to the passed in node
         self.next_node = new_next
 
-class LinkedList: # implemented with linked list
+class LinkedList:
     def __init__(self):
-        # first node in the list (calling head as in head vs tail)
+        # first node in the list 
         self.head = None
+        # last node in the list
+        self.tail = None
+  
+    # we don't have access to the end of the linked list
+    # when we want to add to the end, we need to traverse the whole linked list to get to the end
+    # O(n) - linear
 
-    def add(self, value):
-        # regardless of if the node is empty or not, we need to wrap value in a node
+    # we have direct access to end of the list so we can add nodes to it directly
+    def add_to_end(self, value):
+        # regardless of if the list is empty or not, we need to wrap the value in a Node 
         new_node = Node(value)
+        # what if the list is empty? 
+        if not self.head and not self.tail:
+            # set both head and tail to new_node
+            self.head = new_node
+            self.tail = new_node
+        # what if the list isn't empty?
+        else:
+            # set the current tail's next to the new node
+            self.tail.set_next(new_node)
+            # set self.tail to the new node
+            self.tail = new_node
 
-        # set next reference to current head
-        new_node.next_node = self.head 
-
-        # becomes new head
-        self.head = new_node 
-
-    def remove(self):
-        # if the list is empty
+    # we already have access so no traversal needed
+    # # O(1)       
+    def remove_from_head(self):
+        # what if the list is empty?
         if not self.head:
             return None
-        # if the list is NOT empty
+        # what if it isn't empty?
         else:
-            # value set to current head
+            # we want to return the value at the current head 
             value = self.head.get_value()
+            # remove the value at the head 
+            # update self.head 
             self.head = self.head.get_next()
             return value
 
-    def add_to_end(self, value):
-        # regardless of if the node is empty or not, we need to wrap value in a node
+    def add_to_head(self, value):
+        # wrap in node
         new_node = Node(value)
-
-        # if queue is empty set new_node as the head
-        if not self.head:
+        # is list empty?
+        if not self.head and not self.tail:
             self.head = new_node
+            self.tail = new_node
+        # if list isn't empty
         else:
-        # start at the head
-            current = self.head
-            # as long as there is another node
-            while current.get_next() is not None:
-                # traverse the list to the end
-                current = current.get_next()
-            # add new_node to the end
-            current.set_next(new_node)
-        
-
-    def remove_from_head(self):
-        # if this is the first item in the queue (first out)
-        if self.head:
-            # store value to return later
-            value = self.head.get_value()
-            # set head to the next node
-            self.head = self.head.get_next()
-            return value
+            new_node.set_next(self.head)
+            self.head = new_node
