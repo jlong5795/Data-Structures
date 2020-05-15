@@ -1,3 +1,4 @@
+from collections import deque
 """
 Binary search trees are a data structure that enforce an ordering over 
 the data they store. That ordering in turn makes it a lot more efficient 
@@ -21,7 +22,6 @@ class BSTNode:
         new_node = BSTNode(value)
         # should we go left?
         if value < self.value:
-            # easier access to the next node
             if not self.left:
                 self.left = new_node
             else:
@@ -61,29 +61,68 @@ class BSTNode:
 
     # Call the function `fn` on the value of each node
     def for_each(self, fn):
+        # call the fn on the current value
         fn(self.value)
+        # if you can pass left, do
         if self.left:
-            self.left.for_each(fn())
+            self.left.for_each(fn)
+        # if you can pass right, do
         if self.right:
-            self.right.for_each(fn())
+            self.right.for_each(fn)
 
     # Part 2 -----------------------
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self, node):
-        pass
-
+        if node.left:
+           node.left.in_order_print(node.left)
+        
+        print(node.value)
+        
+        if node.right:
+            node.right.in_order_print(node.right)
+        
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self, node):
-        pass
+        queue = deque()
+
+        # passed in node is starting point
+        queue.append(node)
+        # you have added 1 element to the queue. Print it then pop it off
+        while len(queue) > 0:
+            print(queue[0].value)
+            node = queue.popleft()
+        # if it has values it leads to add them to the queue
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        
+
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self, node):
-        pass
+        stack = []
 
+        stack.append(node)
+
+        while len(stack) > 0:
+            current = stack.pop()
+
+            if current.right:
+                stack.append(current.right)
+            if current.left:
+                stack.append(current.left)
+
+            print(current.value)
+
+
+
+
+        #stack
     # Stretch Goals -------------------------
     # Note: Research may be required
 
